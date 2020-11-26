@@ -19,6 +19,7 @@ class InitialStateReporter:
     def report_state(self, state):
         if self.enabled:
             try:
+                logging.debug(f"reporting state as {state}")
                 self.streamer.log(key=self.item_key, value=state)
             except Exception as ex:
                 logging.exception("unable to report state to initialstate")
