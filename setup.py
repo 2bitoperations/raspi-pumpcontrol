@@ -5,8 +5,8 @@ version = "0.0.1"
 
 homedir = "/root/raspi-pumpcontrol/"
 
-if os.path.isfile(homedir + "raspipump.conf"):
-    cmd = "cp -u " + homedir + "raspipump.conf " + homedir + "raspisump.conf.save"
+if os.path.isfile("/etc/raspipump.conf"):
+    cmd = "cp -u " "/etc/raspipump.conf " + "/etc/raspisump.conf.save"
     os.system(cmd)
 
 raspi_pump_files = [
@@ -14,7 +14,7 @@ raspi_pump_files = [
 ]
 
 add_files = [
-    (homedir + "sample_config", ["conf/raspipump.conf"]),
+    ("/etc/raspipump.example.conf", ["raspipump.example.conf"]),
 ]
 
 setup(
