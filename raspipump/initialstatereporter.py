@@ -20,7 +20,6 @@ class InitialStateReporter:
         if self.enabled:
             try:
                 self.streamer.log(key=self.item_key, value=state)
-                self.streamer.flush()
             except Exception as ex:
                 logging.exception("unable to report state to initialstate")
 
