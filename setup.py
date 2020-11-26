@@ -10,7 +10,7 @@ if os.path.isfile(homedir + "raspipump.conf"):
     os.system(cmd)
 
 raspi_pump_files = [
-    "bin/pump.py",
+    "bin/pump-control.py",
 ]
 
 add_files = [
