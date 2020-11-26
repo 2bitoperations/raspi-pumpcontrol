@@ -30,6 +30,7 @@ config.read("/etc/raspi-pump.conf")
 if config.getboolean("remote-syslog", "enabled"):
     syslogLogger = handlers.SysLogHandler(
         address=(config.get("remote-syslog", "host"), config.getint("remote-syslog", "port")))
+    syslogLogger.setLevel(logging.DEBUG)
     rootLogger.addHandler(syslogLogger)
 
 cistern = Cistern(url=config.get("pump", "cistern_url"),

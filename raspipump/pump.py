@@ -106,7 +106,7 @@ class Pump:
                         # valid reading, ideally we want to run the pump. check our cooldown time.
                         if (self.state is not ON and self.cooldown_allows_running()) or \
                                 (self.state is ON and self.pipe_break_detect_allows_running(
-                                    reading["level"]) and self.max_runtime_allows_running()):
+                                ) and self.max_runtime_allows_running()):
                             # sweet, we can run.
                             logging.info("running pump, level is {level} desired is {desired}"
                                          .format(level=reading["level"], desired=self.desired_level))
@@ -129,7 +129,7 @@ class Pump:
                             time.sleep(self.sleep_between_readings_seconds)
                             continue
                         elif self.state is ON and not self.pipe_break_detect_allows_running(
-                                current_level=reading["level"]):
+                        ):
                             logging.warning("fault! level is {level} desired is {desired}, pipe break fault suspected"
                                             .format(level=reading["level"], desired=self.desired_level))
                             self.state = FAULT
@@ -152,7 +152,7 @@ class Pump:
             self._pump_off()
             logging.info("exiting, pump is off, exiting.")
 
-    def pipe_break_detect_allows_running(self, current_level):
+    def pipe_break_detect_allows_running(self):
         total_time_running_secs = abs(datetime.datetime.now().timestamp() - self.pump_on_time.timestamp()) / 1000
         logging.debug(f"total running time {total_time_running_secs} history {self.pump_on_history}")
         if total_time_running_secs < self.level_must_move_in_seconds:
@@ -164,7 +164,8 @@ class Pump:
                     abs(self.pump_on_history[i]["value"] - self.pump_on_history[i + 1]["value"]))
             total_value_change = sum(running_value_change)
             logging.debug(
-                f"total running time {total_time_running_secs} history {self.pump_on_history} total change {total_value_change} threshold {self.level_change_threshold}")
+                f"total running time {total_time_running_secs} history {self.pump_on_history} "
+                f"total change {total_value_change} threshold {self.level_change_threshold}")
             return total_value_change > float(self.level_change_threshold)
 
     def max_runtime_allows_running(self):
