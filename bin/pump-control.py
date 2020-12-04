@@ -54,3 +54,5 @@ pump = Pump(cistern=cistern,
             level_must_move_in_seconds=config.getfloat("pump", "level_must_move_in_seconds"),
             level_change_threshold=config.getfloat("pump", "level_change_threshold"),
             driver=config.get("gpio", "driver"))
+
+pump.run()
