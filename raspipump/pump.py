@@ -154,6 +154,7 @@ class Pump:
 
         finally:
             logging.info("exiting, about to turn pump off")
+            self.initialstate.report_state(OFF)
             self._pump_off()
             logging.info("exiting, pump is off, exiting.")
 
