@@ -1,3 +1,6 @@
+from os import path
+
+
 class SysFSLed:
     def __init__(self, pin, active_high):
         gpio_base_id = None
@@ -7,8 +10,9 @@ class SysFSLed:
             gpio_base_id = int(gpio_base_file.readline())
             self.requested_pin_sysfs_id = gpio_base_id + int(pin)
 
-        with open("/sys/class/gpio/export", "w") as gpio_export_file:
-            gpio_export_file.write("{pin}".format(pin=self.requested_pin_sysfs_id))
+        if not path.exists("/sys/class/gpio/gpio{pin}".format(pin=self.requested_pin_sysfs_id)):
+            with open("/sys/class/gpio/export", "w") as gpio_export_file:
+                gpio_export_file.write("{pin}".format(pin=self.requested_pin_sysfs_id))
 
         with open("/sys/class/gpio/gpio{pin}/direction".format(pin=self.requested_pin_sysfs_id), "w") as gpio_direction_file:
             gpio_direction_file.write("out")

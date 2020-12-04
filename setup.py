@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-version = "0.0.4"
+version = "0.0.5"
 
 homedir = "/root/raspi-pumpcontrol/"
 
