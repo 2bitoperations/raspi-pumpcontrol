@@ -41,7 +41,7 @@ setup(
     packages=["raspipump"],
     scripts=raspi_pump_files,
     data_files=add_files,
-    install_requires=["python3-gpiozero", "ISStreamer", "requests"],
+    install_requires=["gpiozero", "ISStreamer", "requests"],
 )
 
 if os.path.isdir(homedir):
