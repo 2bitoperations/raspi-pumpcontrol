@@ -8,6 +8,7 @@ from logging import handlers
 from raspipump.cistern import Cistern
 from raspipump.initialstatereporter import InitialStateReporter
 from raspipump.pump import Pump
+import sys
 
 INITIALSTATE = "initialstate"
 
@@ -51,4 +52,5 @@ pump = Pump(cistern=cistern,
             sleep_between_readings_seconds=config.getfloat("pump", "sleep_between_readings_seconds"),
             desired_level=config.getfloat("pump", "desired_level"),
             level_must_move_in_seconds=config.getfloat("pump", "level_must_move_in_seconds"),
-            level_change_threshold=config.getfloat("pump", "level_change_threshold"))
+            level_change_threshold=config.getfloat("pump", "level_change_threshold"),
+            driver=config.get("gpio", "driver"))

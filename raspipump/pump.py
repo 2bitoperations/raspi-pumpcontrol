@@ -3,7 +3,6 @@ import datetime
 import logging
 import math
 import time
-from gpiozero import LED
 
 # some constants to help define the states we could be in
 OFF = 0
@@ -13,6 +12,8 @@ COMM_ERROR = -1
 # a pipe may be broken, the pump may be broken
 FAULT = -2
 
+DRIVER_SYSFS = "sysfs"
+DRIVER_GPIOZERO = "gpiozero"
 
 class Pump:
     def __init__(self,
@@ -25,9 +26,17 @@ class Pump:
                  sleep_between_readings_seconds,
                  desired_level,
                  level_must_move_in_seconds,
-                 level_change_threshold):
+                 level_change_threshold,
+                 driver):
         self.state = OFF
-        self.pump = LED(pump_pin, active_high=active_high)
+
+        if driver is "gpiozero":
+            from gpiozero import LED
+            self.pump = LED(pump_pin, active_high=active_high)
+        elif driver is "sysfs":
+            from raspipump.sysfsled import SysFSLed
+            self.pump = SysFSLed(pin=pump_pin, active_high=active_high)
+        self.pump.off()
         self.cistern = cistern
         self.initialstate = initialstate_reporter
         self.pump_off_time = datetime.datetime.utcfromtimestamp(0)
@@ -39,10 +48,6 @@ class Pump:
         self.desired_level = desired_level
         self.level_must_move_in_seconds = level_must_move_in_seconds
         self.level_change_threshold = level_change_threshold
-
-    def _is_pump_off(self):
-        if self.active_high == 1:
-            return self.pump.state
 
     def _pump_off(self):
         # if the pump isn't already off, record off time.

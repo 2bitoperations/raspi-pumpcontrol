@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-version = "0.0.2"
+version = "0.0.3"
 
 homedir = "/root/raspi-pumpcontrol/"
 
@@ -41,7 +41,7 @@ setup(
     packages=["raspipump"],
     scripts=raspi_pump_files,
     data_files=add_files,
-    install_requires=["gpiozero", "ISStreamer", "requests"],
+    install_requires=["gpiozero", "ISStreamer", "requests", "RPi.GPIO", "wheel"],
 )
 
 if os.path.isdir(homedir):
