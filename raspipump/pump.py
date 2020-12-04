@@ -167,7 +167,7 @@ class Pump:
             running_value_change = []
             for i in range(1, len(self.pump_on_history)):
                 running_value_change.append(
-                    abs(self.pump_on_history[i]["value"] - self.pump_on_history[i + 1]["value"]))
+                    abs(self.pump_on_history[i]["level"] - self.pump_on_history[i + 1]["level"]))
             total_value_change = sum(running_value_change)
             logging.debug(
                 f"total running time {total_time_running_secs} history {self.pump_on_history} "

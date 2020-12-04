@@ -18,15 +18,16 @@ class Cistern:
             response = requests.get(self.url, timeout=self.timeout_secs)
             if response.status_code is not 200:
                 logging.warning(
-                    "nonzero status while fetching level %s, body %s" % (response.status_code, response.text))
+                    "nonzero status while fetching level status {status}, body {body}"
+                    .format(status=response.status_code, body=response.text))
                 return None
             reading = response.json()
             if "level" not in reading or "timestamp" not in reading:
-                logging.warning("response did not contain required fields status %s body %s" % (
-                response.status_code, response.text))
+                logging.warning("response did not contain required fields status {status}, body {body}"
+                                .format(status=response.status_code, body=response.text))
                 return None
             logging.debug("fetched level as {level} timestamp {timestamp} full body {body}"
-                          .format(level=reading["level"], timestamp=reading["timestamp"], body=["body"]))
+                          .format(level=reading["level"], timestamp=reading["timestamp"], body=response.text))
             return reading
         except Exception as ex:
             logging.exception("error fetching reading")
