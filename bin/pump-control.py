@@ -33,6 +33,8 @@ config.read("/etc/raspi-pump.conf")
 if config.getboolean("remote-syslog", "enabled"):
     syslogLogger = handlers.SysLogHandler(
         address=(config.get("remote-syslog", "host"), config.getint("remote-syslog", "port")))
+    sysfs_formatter = logging.Formatter('%(levelname)s:%(name)s:raspi-pump %(message)s')
+    syslogLogger.setFormatter(sysfs_formatter)
     syslogLogger.setLevel(logging.DEBUG)
     rootLogger.addHandler(syslogLogger)
 
