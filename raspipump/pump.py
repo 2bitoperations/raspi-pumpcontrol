@@ -30,10 +30,10 @@ class Pump:
                  driver):
         self.state = OFF
 
-        if driver is "gpiozero":
+        if driver == "gpiozero":
             from gpiozero import LED
             self.pump = LED(pump_pin, active_high=active_high)
-        elif driver is "sysfs":
+        elif driver == "sysfs":
             from raspipump.sysfsled import SysFSLed
             self.pump = SysFSLed(pin=pump_pin, active_high=active_high)
         self.pump.off()
