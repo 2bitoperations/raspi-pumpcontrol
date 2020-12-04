@@ -8,8 +8,10 @@ class Cistern:
     def __init__(self,
                  url,
                  timeout_secs):
-        self.url = url
+        self.url = str(url)
         self.timeout_secs = timeout_secs
+        logging.info("cistern initialized with url {url} and timeout {timeout}"
+                      .format(url=self.url, timeout=self.timeout_secs))
 
     def get_reading(self):
         try:
@@ -32,6 +34,9 @@ class Cistern:
 
     @staticmethod
     def is_reading_valid(reading, max_timedelta_seconds):
+        if reading is None:
+            logging.debug("reading was None")
+            return False
         if "timestamp" not in reading:
             logging.debug("reading {reading} missing timestamp. invalid.".format(reading=reading))
             return False
