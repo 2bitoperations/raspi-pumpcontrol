@@ -45,7 +45,7 @@ class Cistern:
             return False
         now = datetime.datetime.now()
         reading_time = datetime.datetime.utcfromtimestamp(reading["timestamp"] / 1000)
-        delta_seconds = abs(now.timestamp() - reading_time.timestamp()) / 1000
+        delta_seconds = abs(now.timestamp() - reading_time.timestamp())
         if delta_seconds < max_timedelta_seconds:
             logging.debug("reading {reading} timedelta {timedelta} within range {max_timedelta_seconds}"
                           .format(reading=reading, timedelta=delta_seconds,

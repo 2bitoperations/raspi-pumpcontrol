@@ -158,7 +158,7 @@ class Pump:
             logging.info("exiting, pump is off, exiting.")
 
     def pipe_break_detect_allows_running(self):
-        total_time_running_secs = abs(datetime.datetime.now().timestamp() - self.pump_on_time.timestamp()) / 1000
+        total_time_running_secs = abs(datetime.datetime.now().timestamp() - self.pump_on_time.timestamp())
         logging.debug(f"total running time {total_time_running_secs} history {self.pump_on_history}")
         if total_time_running_secs < self.level_must_move_in_seconds:
             return True
@@ -174,12 +174,12 @@ class Pump:
             return total_value_change > float(self.level_change_threshold)
 
     def max_runtime_allows_running(self):
-        total_time_running_secs = abs(datetime.datetime.now().timestamp() - self.pump_on_time.timestamp()) / 1000
+        total_time_running_secs = abs(datetime.datetime.now().timestamp() - self.pump_on_time.timestamp())
         logging.debug(f"total running time {total_time_running_secs} max allowed time {self.max_run_time_seconds}")
         return float(total_time_running_secs) < float(self.max_run_time_seconds)
 
     def cooldown_allows_running(self):
-        total_time_in_cooldown_secs = abs(datetime.datetime.now().timestamp() - self.pump_off_time.timestamp()) / 1000
+        total_time_in_cooldown_secs = abs(datetime.datetime.now().timestamp() - self.pump_off_time.timestamp())
         logging.debug("total time in cooldown {total_time_in_cooldown_secs} cooldown time {cooldown_time}"
                       .format(total_time_in_cooldown_secs=total_time_in_cooldown_secs,
                               cooldown_time=self.cooldown_seconds))
