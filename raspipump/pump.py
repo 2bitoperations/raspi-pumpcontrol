@@ -77,13 +77,13 @@ class Pump:
                             pump_on=self.pump.is_lit))
                 self.initialstate.report_state(self.state)
 
-                # if we're in a FAULT state, we're stuck here.
+                # if we're in a FAULT state, we're stuck here. :(:(:(:(
                 if self.state is FAULT:
                     self._pump_off()
                     time.sleep(self.sleep_between_readings_seconds)
                     continue
                 else:
-                    # have we exceeded our max allowed runtime?
+                    # have we exceeded our max allowed runtime? then turn pump off
                     if self.state is ON and not self.max_runtime_allows_running():
                         logging.info("max allowed runtime exceeded, pump off.")
                         self.state = OFF
@@ -95,12 +95,14 @@ class Pump:
                     reading_valid = self.cistern.is_reading_valid(reading,
                                                                   max_timedelta_seconds=self.sleep_between_readings_seconds * 2)
                     if not reading_valid:
+                        # reading not valid, report comm error and turn pump off
                         logging.warning("unable to get reading. pump off.")
                         self.state = COMM_ERROR
                         self._pump_off()
                         time.sleep(self.sleep_between_readings_seconds)
                         continue
                     elif reading_valid and (float(reading["level"]) >= float(self.desired_level)):
+                        # reading is valid but current level >= desired level, turn pump off and sleep
                         logging.debug("not running pump, level is {level} desired is {desired}"
                                       .format(level=reading["level"], desired=self.desired_level))
                         self.state = OFF
@@ -108,7 +110,7 @@ class Pump:
                         time.sleep(self.sleep_between_readings_seconds)
                         continue
                     elif reading_valid and (float(reading["level"]) < float(self.desired_level)):
-                        # valid reading, ideally we want to run the pump. check our cooldown time.
+                        # valid reading, ideally we want to run the pump. check our cooldown time and pipe break.
                         if (self.state is not ON and self.cooldown_allows_running()) or \
                                 (self.state is ON and self.pipe_break_detect_allows_running(
                                 ) and self.max_runtime_allows_running()):
@@ -118,6 +120,7 @@ class Pump:
                             self.state = ON
                             self._pump_on(level_at_pump_on=float(reading["level"]))
                             time.sleep(self.sleep_between_readings_seconds)
+                            #put back to sleep while pump is running - will automatically check reading
                             continue
                         elif self.state is OFF or self.state is COMM_ERROR and not self.cooldown_allows_running():
                             logging.info("not pump, level is {level} desired is {desired}, within cooldown period"
